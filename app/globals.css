@@ -1,0 +1,99 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #020617;
+  --card: rgba(15, 23, 42, 0.8);
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --brand: #34d399;
+  --border: rgba(148, 163, 184, 0.2);
+}
+
+@theme inline {
+  --font-sans: var(--font-body);
+  --font-mono: "Fira Code", monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  color: var(--text);
+  font-family: var(--font-body), sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-heading), sans-serif;
+  letter-spacing: 0.02em;
+}
+
+.bg-app {
+  background: radial-gradient(circle at 15% 10%, #0f766e 0%, transparent 25%),
+    radial-gradient(circle at 80% 20%, #0f172a 0%, transparent 35%),
+    linear-gradient(160deg, #020617 0%, #0b1120 55%, #111827 100%);
+}
+
+.bg-decor {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.bg-decor-blob {
+  position: absolute;
+  width: 28rem;
+  height: 28rem;
+  border-radius: 999px;
+  filter: blur(80px);
+  opacity: 0.22;
+  animation: float-blob 12s ease-in-out infinite;
+}
+
+.bg-decor-blob-1 {
+  top: -8rem;
+  left: -6rem;
+  background: #14b8a6;
+}
+
+.bg-decor-blob-2 {
+  right: -8rem;
+  bottom: -12rem;
+  background: #3b82f6;
+  animation-delay: 1.5s;
+}
+
+.bg-decor-pattern {
+  position: absolute;
+  inset: 0;
+  background-image: url("/template-assets/backgrounds/patern.svg");
+  opacity: 0.06;
+}
+
+.admin-input {
+  width: 100%;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border);
+  background: rgba(2, 6, 23, 0.7);
+  padding: 0.625rem 0.75rem;
+  color: var(--text);
+}
+
+.admin-input::placeholder {
+  color: var(--muted);
+}
+
+@keyframes float-blob {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(15px, -12px) scale(1.04);
+  }
+}
