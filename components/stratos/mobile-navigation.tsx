@@ -50,8 +50,8 @@ export default function StratosMobileNavigation({
   };
 
   const handleNavItemClick = (id: number) => {
-    if (id === 1) {
-      setActiveItem(1);
+    if (id === 2) {
+      setActiveItem(2);
       setIsOpen(false);
       onOpenProfilePanel?.();
       return;
@@ -94,17 +94,17 @@ export default function StratosMobileNavigation({
     { id: 1, title: "Quien soy?", icon: <User size={20} strokeWidth={1.5} /> },
     {
       id: 2,
-      title: "What I do",
+      title: "Que hago yo?",
       icon: <BriefcaseBusiness size={20} strokeWidth={1.5} />,
     },
     {
       id: 3,
-      title: "What I have done",
+      title: "Lo que Hago",
       icon: <ListTodo size={20} strokeWidth={1.5} />,
     },
     {
       id: 4,
-      title: "My Journey",
+      title: "Mi experiencia",
       icon: <SquareChartGantt size={20} strokeWidth={1.5} />,
     },
     { id: 5, title: "Testimonials", icon: <Quote size={20} strokeWidth={1.5} /> },
