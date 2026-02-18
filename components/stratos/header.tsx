@@ -86,7 +86,7 @@ export default function StratosHeader() {
             <motion.span variants={fadeInUp}>Alan</motion.span>
             <motion.div variants={fadeInRight}>
               <Image
-                src="/images/geek.png"
+                src="/images/formal.png"
                 alt="Portrait of Alan Martínez"
                 width={90}
                 height={90}
@@ -115,3 +115,4 @@ export default function StratosHeader() {
     </header>
   );
 }
+

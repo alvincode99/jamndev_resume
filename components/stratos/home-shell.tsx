@@ -4,8 +4,10 @@ import { useCallback, useState } from "react";
 
 import StratosHeader from "@/components/stratos/header";
 import StratosMobileNavigation from "@/components/stratos/mobile-navigation";
+import StratosMyJourney from "@/components/stratos/my-journey";
 import StratosNavigation from "@/components/stratos/navigation";
 import StratosProfilePanel from "@/components/stratos/profile-panel";
+import StratosWhatIHaveDone from "@/components/stratos/what-i-have-done";
 
 /**
  * Orquesta el home de Stratos y el panel lateral de perfil.
@@ -34,9 +36,9 @@ export default function StratosHomeShell() {
       <StratosProfilePanel isOpen={isProfilePanelOpen} onClose={closeProfilePanel} />
       <StratosHeader />
 
-      <section id="my-skills" className="min-h-[20vh]" />
-      <section id="portfolio" className="min-h-[20vh]" />
-      <section id="my-journey" className="min-h-[20vh]" />
+      <section id="my-skills" className="h-0" />
+      <StratosWhatIHaveDone />
+      <StratosMyJourney />
       <section id="testimonials" className="min-h-[20vh]" />
       <section id="contact" className="min-h-[20vh]" />
     </div>

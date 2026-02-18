@@ -84,8 +84,8 @@ export default function StratosProfilePanel({
 
         <div className="flex-1 overflow-y-auto px-6 py-7">
           <Image
-            src="/images/formal.png"
-            alt="Retrato formal"
+            src="/images/geek.png"
+            alt="Retrato geek"
             width={340}
             height={196}
             className="mx-auto h-auto w-[48%] rounded-sm border border-white/10 object-cover"
