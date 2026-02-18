@@ -9,7 +9,7 @@ interface TagBadgeProps {
  */
 export function TagBadge({ label }: TagBadgeProps) {
   return (
-    <span className="inline-flex items-center rounded-full border border-emerald-500/40 bg-emerald-500/10 px-3 py-1 text-xs font-medium uppercase tracking-wider text-emerald-200">
+    <span className="font-mono inline-flex items-center rounded-full border border-emerald-500/40 bg-emerald-500/10 px-3 py-1 text-xs font-medium uppercase tracking-wider text-emerald-200">
       {label}
     </span>
   );

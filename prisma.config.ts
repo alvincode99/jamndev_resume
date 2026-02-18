@@ -2,12 +2,13 @@ import "dotenv/config";
 import { defineConfig } from "prisma/config";
 
 /**
- * ConfiguraciÃ³n central de Prisma 7 para schema, migraciones y datasource.
+ * Configuracion central de Prisma 7 para schema, migraciones y datasource.
  */
 export default defineConfig({
   schema: "prisma/schema.prisma",
   migrations: {
     path: "prisma/migrations",
+    seed: "tsx prisma/seed.ts",
   },
   datasource: {
     url:

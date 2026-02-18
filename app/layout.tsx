@@ -1,61 +1,52 @@
 import type { Metadata } from "next";
-import { Bebas_Neue, Manrope } from "next/font/google";
-
-import { SiteFooter } from "@/components/layout/site-footer";
-import { SiteHeader } from "@/components/layout/site-header";
-import { getServerAuthSession } from "@/lib/auth";
+import {
+  Inter,
+  JetBrains_Mono,
+  Space_Grotesk,
+} from "next/font/google";
 
 import "./globals.css";
 
-const headingFont = Bebas_Neue({
-  variable: "--font-heading",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
-  weight: "400",
+  weight: ["400", "500", "600", "700"],
 });
 
-const bodyFont = Manrope({
-  variable: "--font-body",
+const bebas = Space_Grotesk({
+  variable: "--font-bebas",
   subsets: ["latin"],
+  weight: ["500", "600", "700"],
+});
+
+const caveat = JetBrains_Mono({
+  variable: "--font-code",
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
 });
 
 /**
- * Metadatos base SEO del proyecto jamndev_resume.
+ * Metadatos base del proyecto.
  */
 export const metadata: Metadata = {
   title: "Jamndev Resume",
-  description:
-    "CV interactivo con proyectos, ejercicios y panel admin construido con Next.js, Prisma y NextAuth.",
-  openGraph: {
-    title: "Jamndev Resume",
-    description:
-      "CV interactivo con experiencia, proyectos y ejercicios tÃ©cnicos.",
-    type: "website",
-  },
+  description: "Base visual de Stratos aplicada en jamndev_resume.",
 };
 
 /**
- * Layout raÃ­z del sitio, compartido por pÃ¡ginas pÃºblicas y admin.
- * @param props Hijos renderizados por el App Router.
- * @returns Estructura HTML global con navegaciÃ³n, contenido y footer.
+ * Layout raiz del App Router con las fuentes de Stratos.
+ * @param props Hijos renderizados por las rutas de la aplicacion.
+ * @returns Estructura HTML global con estilos tipograficos base.
  */
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const session = await getServerAuthSession();
-
   return (
     <html lang="es">
-      <body className={`${headingFont.variable} ${bodyFont.variable} bg-app text-slate-100 antialiased`}>
-        <div className="bg-decor" aria-hidden>
-          <div className="bg-decor-blob bg-decor-blob-1" />
-          <div className="bg-decor-blob bg-decor-blob-2" />
-          <div className="bg-decor-pattern" />
-        </div>
-        <div className="relative z-10 flex min-h-screen flex-col">
-          <SiteHeader isAdmin={session?.user?.role === "ADMIN"} />
-          <main className="flex-1">{children}</main>
-          <SiteFooter />
-        </div>
+      <body
+        className={`${inter.variable} ${bebas.variable} ${caveat.variable} overflow-x-hidden antialiased`}
+      >
+        {children}
       </body>
     </html>
   );
