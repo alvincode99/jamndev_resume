@@ -1,0 +1,144 @@
+@import "tailwindcss";
+
+:root {
+  --background: #18181b;
+  --foreground: #171717;
+  --primary: #7cffb2;
+  --primary-400: #7cffb2;
+  --secondary: #1d428a;
+  --tertiary: rgb(58, 123, 213);
+  --neutral: #cbd2d9;
+  --gold: #2a2f3a;
+  --grey-shadow: 0 10px 40px #2a2a2a0d;
+  --light-grey-shadow: 0 8px 16px #2a2a2a0d;
+  --grey-text: #777;
+  --light-grey: #eee;
+  --hover-light-grey: #2a2a2a1a;
+  --dark-grey: #878787;
+  --blue-opacity--32: rgba(64, 124, 255, 0.32);
+  --blue-opacity--4: rgba(64, 124, 255, 0.04);
+  --grey-opcaity-50: #2a2a2a0d;
+  --grey-50: #f2f2f2;
+  --grey-300: #2a2f3a;
+  --grey-400: #9aa4b2;
+  --grey-700: rgb(63, 63, 70);
+  --grey-800-opacity-50: rgb(39, 39, 42, 0.5);
+  --white-opacity-10: rgba(255, 255, 255, 0.1);
+  --white-opacity-20: rgba(255, 255, 255, 0.2);
+  --card-background: linear-gradient(
+    136.82deg,
+    hsla(0, 0%, 100%, 0.08) 9.54%,
+    hsla(0, 0%, 100%, 0) 101.31%
+  );
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-tertiary: var(--tertiary);
+  --color-neutral: var(--neutral);
+  --color-grey: var(--grey-text);
+  --color-light-grey: var(--light-grey);
+  --color-dark-grey: var(--dark-grey);
+  --color-hover-light-grey: var(--hover-light-grey);
+  --color-opacity--32: var(--blue-opacity--32);
+  --color-opacity--4: var(--blue-opacity--4);
+  --color-gradient: linear-gradient(90deg, var(--color-opacity--32), var(--color-opacity--4));
+  --color-grey-opcaity: var(--grey-opcaity-50);
+  --color-card: var(--card-background);
+  --color-grey-50: var(--grey-50);
+  --color-grey-300: var(--grey-300);
+  --color-grey-400: var(--grey-400);
+  --color-grey-700: var(--grey-700);
+  --color-primary-400: var(--primary-400);
+  --color-white-opacity-10: var(--white-opacity-10);
+  --color-white-opacity-20: var(--white-opacity-20);
+  --color-grey-800-opacity-50: var(--grey-800-opacity-50);
+
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-code);
+  --font-bebas: var(--font-bebas);
+  --font-inter: var(--font-inter);
+  --font-caveat: var(--font-code);
+
+  --shadow-grey: var(--grey-shadow);
+  --shadow-light-grey: var(--light-grey-shadow);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--background);
+  font-family: var(--font-inter), sans-serif;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-bebas), sans-serif;
+  letter-spacing: -4px;
+}
+
+.highlight {
+  background-image: linear-gradient(90deg, var(--color-opacity--32), var(--color-opacity--4));
+}
+
+.background-primary {
+  background: linear-gradient(136.82deg, rgba(255, 255, 255, 0.08) 9.54%, rgba(255, 255, 255, 0) 101.31%);
+}
+
+.container {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+@media (min-width: 576px) {
+  .container {
+    max-width: 540px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 720px;
+  }
+}
+
+@media (min-width: 992px) {
+  .container {
+    max-width: 960px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1140px;
+  }
+}
+
+.admin-input {
+  width: 100%;
+  border-radius: 0.5rem;
+  border: 1px solid var(--white-opacity-20);
+  background: rgba(2, 6, 23, 0.7);
+  padding: 0.625rem 0.75rem;
+  color: var(--grey-50);
+}
+
+.admin-input::placeholder {
+  color: var(--grey-400);
+}
