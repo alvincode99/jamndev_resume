@@ -2,11 +2,13 @@
 
 import { useCallback, useState } from "react";
 
+import StratosContactSection from "@/components/stratos/contact-section";
 import StratosHeader from "@/components/stratos/header";
 import StratosMobileNavigation from "@/components/stratos/mobile-navigation";
 import StratosMyJourney from "@/components/stratos/my-journey";
 import StratosNavigation from "@/components/stratos/navigation";
 import StratosProfilePanel from "@/components/stratos/profile-panel";
+import StratosProjectsSkills from "@/components/stratos/projects-skills";
 import StratosWhatIHaveDone from "@/components/stratos/what-i-have-done";
 
 /**
@@ -39,8 +41,8 @@ export default function StratosHomeShell() {
       <section id="my-skills" className="h-0" />
       <StratosWhatIHaveDone />
       <StratosMyJourney />
-      <section id="testimonials" className="min-h-[20vh]" />
-      <section id="contact" className="min-h-[20vh]" />
+      <StratosProjectsSkills />
+      <StratosContactSection />
     </div>
   );
 }
