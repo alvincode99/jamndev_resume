@@ -142,7 +142,7 @@ export default function StratosTiltedCard({
             alt={altText}
             width={150}
             height={150}
-            className="mt-6 flex-shrink-0 grayscale transition-[filter] will-change-[filter] group-hover:grayscale-0"
+            className="mx-auto mt-4 h-[120px] w-[150px] flex-shrink-0 object-contain object-center grayscale transition-[filter] will-change-[filter] group-hover:grayscale-0"
           />
           <div className="flex flex-col items-center">
             <span className="mb-2">

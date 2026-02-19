@@ -125,8 +125,8 @@ export default function StratosNavigation({ onOpenProfilePanel }: StratosNavigat
       title: "Mi experiencia",
       icon: <SquareChartGantt size={20} strokeWidth={1.5} />,
     },
-    { id: 5, title: "Testimonials", icon: <Quote size={20} strokeWidth={1.5} /> },
-    { id: 6, title: "Contact", icon: <Mail size={20} strokeWidth={1.5} /> },
+    { id: 5, title: "Proyectos", icon: <Quote size={20} strokeWidth={1.5} /> },
+    { id: 6, title: "Contacto", icon: <Mail size={20} strokeWidth={1.5} /> },
   ];
 
   return (
