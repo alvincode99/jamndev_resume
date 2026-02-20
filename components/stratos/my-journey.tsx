@@ -230,8 +230,16 @@ function JourneyTimeline() {
           <div className="order-1 xl:order-2 xl:col-span-2">
             <div className="no-scrollbar rounded-3xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur-xl lg:p-8 xl:h-[var(--journey-mini-cards-height)] xl:overflow-y-auto">
               <div className="mb-6 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-                <div className="background-primary relative flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-lg border border-grey-300 text-grey-50 lg:h-20 lg:w-20">
-                  <Image src={currentItem.logo} alt={currentItem.company} width={100} height={100} />
+                <div className="background-primary relative flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl border border-primary-400/35 bg-white/10 p-1 text-grey-50 lg:h-20 lg:w-20">
+                  <div className="h-full w-full overflow-hidden rounded-xl border border-white/35 bg-white shadow-inner">
+                    <Image
+                      src={currentItem.logo}
+                      alt={currentItem.company}
+                      width={100}
+                      height={100}
+                      className="h-full w-full object-contain p-1"
+                    />
+                  </div>
                 </div>
                 <div className="min-w-0">
                   <h4 className="mb-1 text-xl font-bold text-white lg:text-2xl">{currentItem.title}</h4>
@@ -361,8 +369,16 @@ function JourneyMiniCard({
       className={`min-h-[180px] w-full cursor-pointer rounded-2xl border p-4 text-left transition-all duration-500 lg:p-6 ${isActive ? `${item.bgColor} ${item.borderColor} shadow-2xl` : "border-white/10 bg-white/5 hover:bg-white/10"}`}
     >
       <div className="flex items-start gap-3 lg:gap-4">
-        <div className="background-primary relative flex h-12 w-12 items-center justify-center rounded-lg border border-grey-300 text-grey-50 lg:h-14 lg:w-14">
-          <Image src={item.logo} alt={item.company} width={100} height={100} />
+        <div className="background-primary relative flex h-12 w-12 items-center justify-center rounded-2xl border border-primary-400/35 bg-white/10 p-1 text-grey-50 lg:h-14 lg:w-14">
+          <div className="h-full w-full overflow-hidden rounded-xl border border-white/35 bg-white shadow-inner">
+            <Image
+              src={item.logo}
+              alt={item.company}
+              width={100}
+              height={100}
+              className="h-full w-full object-contain p-1"
+            />
+          </div>
         </div>
         <div className="min-w-0 flex-1">
           <div className="mb-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
