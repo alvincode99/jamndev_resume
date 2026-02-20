@@ -3,19 +3,16 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import {
-  Check,
   Clock,
   Eye,
-  Flame,
   Github,
   Globe,
   Linkedin,
   Mail,
   MapPinHouse,
+  MessageCircle,
   ThumbsUp,
   Trophy,
-  Twitter,
-  Users,
   type LucideIcon,
 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -26,27 +23,17 @@ type SocialLink = {
   ariaLabel: string;
 };
 
-type Achievement = {
-  id: number;
+type Activity = {
   title: string;
   description: string;
-  icon: LucideIcon;
-  color: string;
-  progress: number;
-  unlocked: boolean;
-};
-
-type Activity = {
-  action: string;
-  item: string;
   time: string;
-  type: "code" | "project" | "design" | "achievement";
+  status: string;
+  category: "Frontend" | "Backend" | "Data";
 };
 
 type Skill = {
   name: string;
   level: number;
-  projects: number;
 };
 
 type Tab = {
@@ -56,61 +43,58 @@ type Tab = {
 };
 
 const SOCIAL_LINKS: SocialLink[] = [
-  { icon: Github, href: "#", ariaLabel: "GitHub" },
-  { icon: Twitter, href: "#", ariaLabel: "Twitter" },
-  { icon: Linkedin, href: "#", ariaLabel: "LinkedIn" },
+  { icon: Github, href: "https://github.com/alvincode99", ariaLabel: "GitHub" },
+  {
+    icon: Linkedin,
+    href: "https://www.linkedin.com/in/jorge-alan-martinez-nu%C3%B1ez-02a6a918a/",
+    ariaLabel: "LinkedIn",
+  },
+  { icon: MessageCircle, href: "https://w.app/oxpnvr", ariaLabel: "WhatsApp" },
   { icon: Mail, href: "mailto:jamndev@outlook.com", ariaLabel: "Email" },
 ];
 
-const ACHIEVEMENTS: Achievement[] = [
-  {
-    id: 1,
-    title: "Code Master",
-    description: "1000+ commits this year",
-    icon: Trophy,
-    color: "from-yellow-400 to-orange-500",
-    progress: 85,
-    unlocked: true,
-  },
-  {
-    id: 2,
-    title: "Team Player",
-    description: "Led 5 successful projects",
-    icon: Users,
-    color: "from-blue-400 to-purple-500",
-    progress: 100,
-    unlocked: true,
-  },
-  {
-    id: 3,
-    title: "Speed Demon",
-    description: "Deploy 50 features in a month",
-    icon: Flame,
-    color: "from-orange-400 to-red-500",
-    progress: 65,
-    unlocked: false,
-  },
-];
-
 const RECENT_ACTIVITY: Activity[] = [
-  { action: "Published", item: "React Component Library", time: "2 hours ago", type: "code" },
-  { action: "Completed", item: "E-commerce Dashboard", time: "1 day ago", type: "project" },
-  { action: "Shared", item: "Design System Guidelines", time: "3 days ago", type: "design" },
-  { action: "Won", item: "Hackathon First Place", time: "1 week ago", type: "achievement" },
+  {
+    title: "Optimizacion de Plataforma CV Personal",
+    description:
+      "Mejora de la plataforma JAMNDEV desarrollada con Next.js para optimizar rendimiento, SEO tecnico y visualizacion de experiencia Fullstack orientada a Cloud y Ciencia de Datos.",
+    time: "Recientemente",
+    status: "Publicado",
+    category: "Frontend",
+  },
+  {
+    title: "Desarrollo de Tutoriales CRUD en Spring Boot",
+    description:
+      "Creacion de contenido tecnico para el desarrollo de APIs RESTful utilizando Spring Boot, aplicando arquitectura hexagonal y buenas practicas de integracion.",
+    time: "En Progreso",
+    status: "Aprendiendo",
+    category: "Backend",
+  },
+  {
+    title: "Diplomado en Ciencia de Datos - TripleTen",
+    description:
+      "Formacion activa en Ciencia de Datos enfocada en analisis exploratorio, machine learning y procesamiento de datos con Python.",
+    time: "En Curso",
+    status: "Aprendiendo",
+    category: "Data",
+  },
 ];
 
 const SKILLS: Skill[] = [
-  { name: "React", level: 95, projects: 25 },
-  { name: "TypeScript", level: 90, projects: 20 },
-  { name: "Node.js", level: 80, projects: 18 },
-  { name: "Java", level: 85, projects: 22 },
-  { name: "Spring Boot", level: 78, projects: 16 },
+  { name: "Java / Spring Boot", level: 90 },
+  { name: "React", level: 85 },
+  { name: "Angular", level: 85 },
+  { name: "Node.js / NestJS", level: 80 },
+  { name: "Next.js", level: 80 },
+  { name: "Docker / Kubernetes", level: 75 },
+  { name: "AWS / GCP", level: 70 },
+  { name: "Python (Data/ML)", level: 70 },
 ];
 
 const TABS: Tab[] = [
-  { key: "profile", label: "Profile", icon: Eye },
-  { key: "activity", label: "Activity", icon: Clock },
-  { key: "achievements", label: "Awards", icon: Trophy },
+  { key: "profile", label: "Perfil", icon: Eye },
+  { key: "activity", label: "Actividad", icon: Clock },
+  { key: "achievements", label: "Logros", icon: Trophy },
 ];
 
 const formatTime = (date: Date): string =>
@@ -121,34 +105,31 @@ const formatTime = (date: Date): string =>
     second: "2-digit",
   });
 
-const getActivityIcon = (type: Activity["type"]) => {
-  const iconMap: Record<Activity["type"], LucideIcon> = {
-    code: Globe,
-    project: ThumbsUp,
-    design: Eye,
-    achievement: Trophy,
+const getActivityIcon = (category: Activity["category"]) => {
+  const iconMap: Record<Activity["category"], LucideIcon> = {
+    Frontend: Eye,
+    Backend: ThumbsUp,
+    Data: Globe,
   };
-  return iconMap[type];
+  return iconMap[category];
 };
 
-const getActivityBgColor = (type: Activity["type"]): string => {
-  const colorMap: Record<Activity["type"], string> = {
-    code: "bg-green-500/20",
-    project: "bg-blue-500/20",
-    design: "bg-purple-500/20",
-    achievement: "bg-yellow-500/20",
+const getActivityBgColor = (category: Activity["category"]): string => {
+  const colorMap: Record<Activity["category"], string> = {
+    Frontend: "bg-cyan-500/20",
+    Backend: "bg-primary-400/20",
+    Data: "bg-violet-500/20",
   };
-  return colorMap[type];
+  return colorMap[category];
 };
 
-const getActivityIconColor = (type: Activity["type"]): string => {
-  const colorMap: Record<Activity["type"], string> = {
-    code: "text-green-400",
-    project: "text-blue-400",
-    design: "text-purple-400",
-    achievement: "text-yellow-400",
+const getActivityIconColor = (category: Activity["category"]): string => {
+  const colorMap: Record<Activity["category"], string> = {
+    Frontend: "text-cyan-300",
+    Backend: "text-primary-400",
+    Data: "text-violet-300",
   };
-  return colorMap[type];
+  return colorMap[category];
 };
 
 function ProfileSection({ skills }: { skills: Skill[] }) {
@@ -190,10 +171,7 @@ function ProfileSection({ skills }: { skills: Skill[] }) {
             >
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-white">{skill.name}</span>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-grey-400">{skill.projects} projects</span>
-                  <span className="text-xs text-grey-400">{skill.level}%</span>
-                </div>
+                <span className="text-xs text-primary-400">{skill.level}%</span>
               </div>
               <div className="h-1 overflow-hidden rounded-full bg-white/10">
                 <div
@@ -212,7 +190,7 @@ function ProfileSection({ skills }: { skills: Skill[] }) {
 function ActivitySection({ activities }: { activities: Activity[] }) {
   return (
     <div className="animate-fadeIn space-y-3">
-      <h4 className="mb-3 flex items-center gap-2 font-bebas text-white">Recent Activity</h4>
+      <h4 className="mb-3 flex items-center gap-2 font-bebas text-white">Actividad Reciente</h4>
       <motion.div
         className="space-y-3"
         initial="hidden"
@@ -228,13 +206,13 @@ function ActivitySection({ activities }: { activities: Activity[] }) {
             },
           },
         }}
-      >
+        >
         {activities.map((activity, index) => {
-          const IconComponent = getActivityIcon(activity.type);
+          const IconComponent = getActivityIcon(activity.category);
           return (
             <motion.div
-              key={`${activity.type}-${index}`}
-              className="flex items-center gap-3 rounded-xl bg-white/5 p-3 transition-all duration-300 hover:bg-white/10"
+              key={`${activity.category}-${index}`}
+              className="rounded-xl bg-white/5 p-3 transition-all duration-300 hover:bg-white/10"
               variants={{
                 hidden: { opacity: 0, y: 20 },
                 visible: {
@@ -247,14 +225,25 @@ function ActivitySection({ activities }: { activities: Activity[] }) {
                 },
               }}
             >
-              <div className={`flex h-8 w-8 items-center justify-center rounded-full ${getActivityBgColor(activity.type)}`}>
-                <IconComponent size={14} className={getActivityIconColor(activity.type)} />
-              </div>
-              <div className="flex-1">
-                <div className="text-sm text-white">
-                  <span className="text-purple-300">{activity.action}</span> {activity.item}
+              <div className="flex items-start gap-3">
+                <div
+                  className={`flex h-8 w-8 items-center justify-center rounded-full ${getActivityBgColor(activity.category)}`}
+                >
+                  <IconComponent size={14} className={getActivityIconColor(activity.category)} />
                 </div>
-                <div className="text-xs text-grey-400">{activity.time}</div>
+                <div className="flex-1">
+                  <div className="text-sm font-semibold text-white">{activity.title}</div>
+                  <div className="mt-1 text-xs leading-5 text-grey-400">{activity.description}</div>
+                  <div className="mt-2 flex items-center gap-2">
+                    <span className="rounded-full border border-primary-400/30 bg-primary-400/10 px-2 py-0.5 text-[10px] font-medium text-primary-400">
+                      {activity.status}
+                    </span>
+                    <span className="rounded-full border border-white/20 bg-white/5 px-2 py-0.5 text-[10px] font-medium text-grey-400">
+                      {activity.category}
+                    </span>
+                    <span className="text-[10px] text-grey-400">{activity.time}</span>
+                  </div>
+                </div>
               </div>
             </motion.div>
           );
@@ -264,70 +253,64 @@ function ActivitySection({ activities }: { activities: Activity[] }) {
   );
 }
 
-function AchievementsSection({ achievements }: { achievements: Achievement[] }) {
+function AchievementsSection() {
   return (
     <div className="animate-fadeIn space-y-3">
-      <h4 className="mb-3 flex items-center gap-2 font-bebas text-white">Achievements</h4>
+      <h4 className="mb-3 flex items-center gap-2 font-bebas text-white">Logros</h4>
       <motion.div
-        className="space-y-3"
+        className="rounded-xl border border-white/10 bg-white/5 p-5 text-center"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
         variants={{
-          hidden: { opacity: 0 },
+          hidden: { opacity: 0, y: 20 },
           visible: {
             opacity: 1,
+            y: 0,
             transition: {
-              staggerChildren: 0.1,
-              delayChildren: 0.1,
+              duration: 0.45,
+              ease: [0.25, 0.1, 0.25, 1],
             },
           },
         }}
       >
-        {achievements.map((achievement) => (
-          <motion.div
-            key={achievement.id}
-            className={`cursor-pointer rounded-xl border p-4 transition-all duration-300 ${achievement.unlocked ? "border-white/10 bg-white/5 hover:scale-105 hover:bg-white/10" : "border-slate-600/30 bg-grey-800/30 opacity-60"}`}
-            variants={{
-              hidden: { opacity: 0, y: 20 },
-              visible: {
-                opacity: 1,
-                y: 0,
-                transition: {
-                  duration: 0.5,
-                  ease: [0.25, 0.1, 0.25, 1],
-                },
-              },
-            }}
-          >
-            <div className="mb-2 flex items-center gap-3">
-              <div
-                className={`rounded-lg bg-gradient-to-br p-2 ${achievement.color} ${achievement.unlocked ? "" : "grayscale"}`}
-              >
-                <achievement.icon size={16} className="text-white" />
-              </div>
-              <div className="flex-1">
-                <div className="text-sm font-medium text-white">{achievement.title}</div>
-                <div className="text-xs text-grey-400">{achievement.description}</div>
-              </div>
-              {achievement.unlocked ? <Check size={16} className="text-green-400" /> : null}
-            </div>
-            {!achievement.unlocked ? (
-              <div className="mt-2">
-                <div className="mb-1 flex items-center justify-between">
-                  <span className="text-xs text-grey-400">Progress</span>
-                  <span className="text-xs text-grey-400">{achievement.progress}%</span>
-                </div>
-                <div className="h-1 overflow-hidden rounded-full bg-slate-700">
-                  <div
-                    className={`h-full bg-gradient-to-r transition-all duration-1000 ${achievement.color}`}
-                    style={{ width: `${achievement.progress}%` }}
-                  />
-                </div>
-              </div>
-            ) : null}
-          </motion.div>
-        ))}
+        <motion.div
+          className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-primary-400/30 bg-primary-400/10 text-primary-400"
+          animate={{
+            scale: [1, 1.08, 1],
+            opacity: [0.7, 1, 0.7],
+          }}
+          transition={{
+            duration: 2,
+            repeat: Number.POSITIVE_INFINITY,
+            ease: "easeInOut",
+          }}
+        >
+          <Trophy size={24} strokeWidth={1.5} />
+        </motion.div>
+
+        <p className="font-bebas text-3xl text-white">Contenido en construccion</p>
+        <p className="mx-auto mt-2 max-w-lg text-sm leading-6 text-grey-400">
+          Estamos preparando esta seccion para mostrar hitos y reconocimientos relevantes.
+        </p>
+
+        <div className="mt-4 flex items-center justify-center gap-2">
+          {[0, 1, 2].map((dot) => (
+            <motion.span
+              key={dot}
+              className="h-2 w-2 rounded-full bg-primary-400"
+              animate={{
+                y: [0, -4, 0],
+                opacity: [0.5, 1, 0.5],
+              }}
+              transition={{
+                duration: 0.8,
+                repeat: Number.POSITIVE_INFINITY,
+                delay: dot * 0.12,
+              }}
+            />
+          ))}
+        </div>
       </motion.div>
     </div>
   );
@@ -382,30 +365,36 @@ function ProfileCard({ currentTime, socialLinks }: { currentTime: Date; socialLi
             },
           }}
         >
-          {socialLinks.map((link) => (
-            <motion.li
-              key={link.ariaLabel}
-              variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  transition: {
-                    duration: 0.5,
-                    ease: [0.25, 0.1, 0.25, 1],
+          {socialLinks.map((link) => {
+            const isMailLink = link.href.startsWith("mailto:");
+
+            return (
+              <motion.li
+                key={link.ariaLabel}
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: {
+                      duration: 0.5,
+                      ease: [0.25, 0.1, 0.25, 1],
+                    },
                   },
-                },
-              }}
-            >
-              <a
-                href={link.href}
-                className="text-grey-400 transition-colors duration-200 hover:text-white"
-                aria-label={link.ariaLabel}
+                }}
               >
-                <link.icon size={20} strokeWidth={1} />
-              </a>
-            </motion.li>
-          ))}
+                <a
+                  href={link.href}
+                  target={isMailLink ? undefined : "_blank"}
+                  rel={isMailLink ? undefined : "noreferrer noopener"}
+                  className="text-grey-400 transition-colors duration-200 hover:text-white"
+                  aria-label={link.ariaLabel}
+                >
+                  <link.icon size={20} strokeWidth={1} />
+                </a>
+              </motion.li>
+            );
+          })}
         </motion.ul>
       </div>
 
@@ -488,7 +477,6 @@ export default function StratosContactSection() {
 
   const memoizedSkills = useMemo(() => SKILLS, []);
   const memoizedActivities = useMemo(() => RECENT_ACTIVITY, []);
-  const memoizedAchievements = useMemo(() => ACHIEVEMENTS, []);
 
   const handleTabChange = useCallback((tab: Tab["key"]) => {
     setActiveView(tab);
@@ -508,7 +496,7 @@ export default function StratosContactSection() {
       case "activity":
         return <ActivitySection activities={memoizedActivities} />;
       case "achievements":
-        return <AchievementsSection achievements={memoizedAchievements} />;
+        return <AchievementsSection />;
       default:
         return <ProfileSection skills={memoizedSkills} />;
     }
@@ -537,7 +525,10 @@ export default function StratosContactSection() {
             Contacto
           </motion.h6>
           <motion.p className="mx-auto w-3xl font-inter leading-7 text-grey-50 max-lg:w-full">
-            Estoy disponible para colaborar en proyectos de producto, plataforma y desarrollo full stack.
+            Estoy disponible para colaborar en
+            <span className="mx-1 font-semibold text-primary-400">proyectos de producto</span>,
+            <span className="mx-1 font-semibold text-primary-400">plataforma</span> y desarrollo
+            full stack.
           </motion.p>
         </motion.div>
 
