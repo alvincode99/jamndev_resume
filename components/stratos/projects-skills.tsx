@@ -19,9 +19,6 @@ type ProjectRow = {
   description: string;
   stack: string[];
   repo: string;
-  demoUrl?: string;
-  status?: string;
-  category?: string;
 };
 
 const projects: ProjectRow[] = projectsJson as ProjectRow[];
@@ -47,7 +44,7 @@ function resolveStackIcon(stack: string[]): LucideIcon {
 /**
  * Renderiza la seccion "Proyectos" con filas enlazadas al repositorio y stacks en formato pills.
  * @returns Bloque de proyectos con icono por tecnologia principal del stack.
- * @remarks Error comun: si `repoUrl` esta vacio en el JSON, la fila no podra redirigir correctamente.
+ * @remarks Error comun: si `repo` esta vacio en el JSON, la fila no podra redirigir correctamente.
  * @example
  * ```tsx
  * <StratosProjectsSkills />
