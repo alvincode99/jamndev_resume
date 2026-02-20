@@ -142,3 +142,12 @@ h3 {
 .admin-input::placeholder {
   color: var(--grey-400);
 }
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

@@ -1,15 +1,19 @@
 "use client";
 
 import Image from "next/image";
-import { Trophy, Terminal } from "lucide-react";
+import { Trophy, Terminal, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import {
   educationJourneyData,
+  type ProfessionalJourney,
   professionalJourneyData,
 } from "@/components/stratos/journey-data";
 import StratosTiltedCard from "@/components/stratos/tilted-card";
+
+const INLINE_CARD_LIMIT = 3;
+const MINI_CARD_WIDTH_CLASS = "w-full max-w-[290px]";
 
 /**
  * Seccion "Mi experiencia" basada en el bloque "My Journey" de Stratos.
@@ -136,19 +140,54 @@ export default function StratosMyJourney() {
 
 function JourneyTimeline() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const extraCardsContainerRef = useRef<HTMLDivElement | null>(null);
+  const miniCardsColumnRef = useRef<HTMLDivElement | null>(null);
+  const [miniCardsHeight, setMiniCardsHeight] = useState<number>(0);
+
   const currentItem = professionalJourneyData[activeIndex] ?? professionalJourneyData[0];
+  const primaryCards = professionalJourneyData.slice(0, INLINE_CARD_LIMIT);
+  const extraCards = professionalJourneyData.slice(INLINE_CARD_LIMIT);
+
+  useEffect(() => {
+    const column = miniCardsColumnRef.current;
+
+    if (!column || typeof ResizeObserver === "undefined") {
+      return;
+    }
+
+    const updateHeight = () => {
+      setMiniCardsHeight(column.offsetHeight);
+    };
+
+    updateHeight();
+
+    const observer = new ResizeObserver(updateHeight);
+    observer.observe(column);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [primaryCards.length]);
 
   if (!currentItem) {
     return null;
   }
 
   return (
-    <section className="relative overflow-hidden px-4 pb-4 pt-20">
-      <div className="relative z-10">
+    <section
+      className="relative overflow-hidden px-4 pb-4 pt-20"
+      style={
+        {
+          "--journey-mini-cards-height": miniCardsHeight ? `${miniCardsHeight}px` : "auto",
+        } as React.CSSProperties
+      }
+    >
+      <div className="relative z-10 space-y-8">
         <div className="grid grid-cols-1 gap-6 xl:grid-cols-3 xl:gap-12">
           <div className="order-2 space-y-4 xl:order-1 xl:col-span-1 xl:space-y-6">
             <motion.div
-              className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-6 xl:grid-cols-1 xl:gap-6"
+              ref={miniCardsColumnRef}
+              className="grid grid-cols-1 gap-4 xl:gap-6"
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, amount: 0.2 }}
@@ -163,11 +202,10 @@ function JourneyTimeline() {
                 },
               }}
             >
-              {professionalJourneyData.map((item, index) => (
+              {primaryCards.map((item, index) => (
                 <motion.div
                   key={item.id}
-                  onClick={() => setActiveIndex(index)}
-                  className={`cursor-pointer transition-all duration-500 ${index === activeIndex ? "scale-105" : "hover:scale-[1.02]"}`}
+                  className={`mx-auto ${MINI_CARD_WIDTH_CLASS} transition-all duration-500 ${index === activeIndex ? "scale-105" : "hover:scale-[1.02]"}`}
                   variants={{
                     hidden: { opacity: 0 },
                     visible: {
@@ -179,46 +217,20 @@ function JourneyTimeline() {
                     },
                   }}
                 >
-                  <div
-                    className={`relative rounded-2xl border p-4 transition-all duration-500 lg:p-6 ${index === activeIndex ? `${item.bgColor} ${item.borderColor} shadow-2xl` : "border-white/10 bg-white/5 hover:bg-white/10"}`}
-                  >
-                    <div className="flex items-start gap-3 lg:gap-4">
-                      <div className="background-primary relative flex h-12 w-12 items-center justify-center rounded-lg border border-grey-300 text-grey-50 lg:h-14 lg:w-14">
-                        <Image src={item.logo} alt={item.company} width={100} height={100} />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <div className="mb-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
-                          <span
-                            className={`w-fit rounded-full px-2 py-1 text-xs font-bold uppercase tracking-wide lg:px-3 ${index === activeIndex ? `${item.textColor} ${item.bgColor}` : "text-gray-400"}`}
-                          >
-                            {item.category}
-                          </span>
-                          <span className="text-sm text-gray-400">{item.year}</span>
-                        </div>
-                        <h4
-                          className={`mb-1 text-base font-bold transition-colors duration-300 lg:text-lg ${index === activeIndex ? "text-white" : "text-gray-300"}`}
-                        >
-                          {item.title}
-                        </h4>
-                        <p
-                          className={`text-sm transition-colors duration-300 ${index === activeIndex ? item.textColor : "text-grey-400"}`}
-                        >
-                          {item.company} • {item.location}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+                  <JourneyMiniCard
+                    item={item}
+                    isActive={index === activeIndex}
+                    onSelect={() => setActiveIndex(index)}
+                  />
                 </motion.div>
               ))}
             </motion.div>
           </div>
 
           <div className="order-1 xl:order-2 xl:col-span-2">
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur-xl lg:p-8">
+            <div className="no-scrollbar rounded-3xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur-xl lg:p-8 xl:h-[var(--journey-mini-cards-height)] xl:overflow-y-auto">
               <div className="mb-6 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-                <div
-                  className={`background-primary relative flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-lg border border-grey-300 text-grey-50 lg:h-20 lg:w-20`}
-                >
+                <div className="background-primary relative flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-lg border border-grey-300 text-grey-50 lg:h-20 lg:w-20">
                   <Image src={currentItem.logo} alt={currentItem.company} width={100} height={100} />
                 </div>
                 <div className="min-w-0">
@@ -266,7 +278,111 @@ function JourneyTimeline() {
             </div>
           </div>
         </div>
+
+        {extraCards.length > 0 ? (
+          <motion.div
+            className="rounded-3xl border border-white/10 bg-white/5 p-4 shadow-2xl backdrop-blur-xl lg:p-6"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+          >
+            <div className="mb-4 flex items-center justify-between">
+              <h4 className="font-bebas text-3xl text-grey-50 lg:text-4xl">Mas experiencias</h4>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  className="rounded-lg border border-white/10 bg-white/5 p-2 text-grey-400 transition hover:bg-white/10 hover:text-white"
+                  onClick={() => extraCardsContainerRef.current?.scrollBy({ left: -360, behavior: "smooth" })}
+                  aria-label="Desplazar experiencias a la izquierda"
+                >
+                  <ChevronLeft size={18} />
+                </button>
+                <button
+                  type="button"
+                  className="rounded-lg border border-white/10 bg-white/5 p-2 text-grey-400 transition hover:bg-white/10 hover:text-white"
+                  onClick={() => extraCardsContainerRef.current?.scrollBy({ left: 360, behavior: "smooth" })}
+                  aria-label="Desplazar experiencias a la derecha"
+                >
+                  <ChevronRight size={18} />
+                </button>
+              </div>
+            </div>
+
+            <div
+              ref={extraCardsContainerRef}
+              className="no-scrollbar flex gap-4 overflow-x-auto pb-2"
+            >
+              {extraCards.map((item, index) => {
+                const mappedIndex = index + INLINE_CARD_LIMIT;
+
+                return (
+                  <motion.div
+                    key={item.id}
+                    className={`${MINI_CARD_WIDTH_CLASS} flex-shrink-0`}
+                    initial={{ opacity: 0, y: 24 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{
+                      duration: 0.35,
+                      delay: index * 0.06,
+                      ease: [0.25, 0.1, 0.25, 1],
+                    }}
+                  >
+                    <JourneyMiniCard
+                      item={item}
+                      isActive={activeIndex === mappedIndex}
+                      onSelect={() => setActiveIndex(mappedIndex)}
+                    />
+                  </motion.div>
+                );
+              })}
+            </div>
+          </motion.div>
+        ) : null}
       </div>
     </section>
+  );
+}
+
+function JourneyMiniCard({
+  item,
+  isActive,
+  onSelect,
+}: {
+  item: ProfessionalJourney;
+  isActive: boolean;
+  onSelect: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onSelect}
+      className={`min-h-[180px] w-full cursor-pointer rounded-2xl border p-4 text-left transition-all duration-500 lg:p-6 ${isActive ? `${item.bgColor} ${item.borderColor} shadow-2xl` : "border-white/10 bg-white/5 hover:bg-white/10"}`}
+    >
+      <div className="flex items-start gap-3 lg:gap-4">
+        <div className="background-primary relative flex h-12 w-12 items-center justify-center rounded-lg border border-grey-300 text-grey-50 lg:h-14 lg:w-14">
+          <Image src={item.logo} alt={item.company} width={100} height={100} />
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="mb-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
+            <span
+              className={`w-fit rounded-full px-2 py-1 text-xs font-bold uppercase tracking-wide lg:px-3 ${isActive ? `${item.textColor} ${item.bgColor}` : "text-gray-400"}`}
+            >
+              {item.category}
+            </span>
+            <span className="text-sm text-gray-400">{item.year}</span>
+          </div>
+          <h4
+            className={`mb-1 text-base font-bold transition-colors duration-300 lg:text-lg ${isActive ? "text-white" : "text-gray-300"}`}
+          >
+            {item.title}
+          </h4>
+          <p className={`text-sm transition-colors duration-300 ${isActive ? item.textColor : "text-grey-400"}`}>
+            {item.company} - {item.location}
+          </p>
+        </div>
+      </div>
+    </button>
   );
 }
