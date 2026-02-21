@@ -1,15 +1,25 @@
 # jamndev_resume
 
-Aplicación full stack (frontend + backend) para publicar CV, ejercicios y proyectos, con panel de administración protegido.
+Proyecto full stack construido con Next.js App Router para publicar CV, experiencia, proyectos y ejercicios tecnicos, incluyendo panel admin, API interna, autenticacion y base de datos.
 
-## Descripción
+Este repositorio esta orientado a aprendizaje practico de arquitectura moderna en Next.js, con foco en buenas practicas de codigo, separacion por capas y despliegue continuo.
 
-El proyecto usa Next.js App Router con API Route Handlers para exponer endpoints públicos y de admin, Prisma para persistencia en PostgreSQL, NextAuth para autenticación y Vitest para pruebas unitarias.
+## Objetivo del proyecto
 
-## Stack
+`jamndev_resume` busca servir como laboratorio real para practicar:
 
-- Node.js `24.x` (`.nvmrc = 24`)
-- Next.js `16.1.6` (App Router)
+- Frontend con React + Next.js (App Router)
+- Backend con Route Handlers (API dentro del mismo proyecto)
+- Persistencia con Prisma + PostgreSQL
+- Seguridad y autenticacion con NextAuth v4
+- Validacion de entrada con Zod
+- Calidad con ESLint + Vitest
+- Flujo CI/CD basico con GitHub Actions y despliegue en Vercel
+
+## Stack tecnico
+
+- Node.js `24.x`
+- Next.js `16.1.6`
 - React / React DOM `19.2.4`
 - TypeScript `5.9.3` (strict)
 - TailwindCSS `4.1.18`
@@ -19,27 +29,60 @@ El proyecto usa Next.js App Router con API Route Handlers para exponer endpoints
 - Zod `4.3.6`
 - Vitest `4.0.18` + Testing Library
 
+## Estado actual
+
+Incluye:
+
+- Home publica con estilo visual basado en templates locales (Stratos + Reeni)
+- Seccion de experiencia profesional con timeline y carrusel
+- Seccion de proyectos con filas clicables al repositorio y stacks en pills
+- Seccion de contacto con perfil, actividad reciente y bloque de logros en construccion
+- Panel admin protegido para CV, ejercicios y proyectos
+- API REST interna para CRUD y busqueda
+- Prisma schema, migraciones y seed
+- CI de lint/test/build
+
+## Estructura de carpetas
+
+```text
+app/
+  api/
+  admin/
+  exercises/
+  projects/
+components/
+  admin/
+  features/
+  layout/
+  stratos/
+data/
+lib/
+prisma/
+  migrations/
+server/
+  repositories/
+  use-cases/
+public/
+tests/
+```
+
 ## Requisitos
 
 - Node.js `24.x`
 - npm `>= 10`
-- Docker Desktop (solo para Postgres local)
+- Docker Desktop (solo para entorno local de PostgreSQL)
 
 ## Variables de entorno
 
-Copia `.env.example` como `.env.local`:
+Crear `.env.local` a partir de `.env.example`.
 
-```bash
-cp .env.example .env.local
-```
+Variables minimas:
 
-Variables:
-
-- `DATABASE_URL`: conexión a PostgreSQL
-- `NEXTAUTH_URL`: URL base de la app
-- `NEXTAUTH_SECRET`: secreto para NextAuth
-- `GITHUB_ID` (opcional): OAuth GitHub
-- `GITHUB_SECRET` (opcional): OAuth GitHub
+- `DATABASE_URL=`
+- `NEXTAUTH_URL=`
+- `NEXTAUTH_SECRET=`
+- `GITHUB_ID=` (opcional)
+- `GITHUB_SECRET=` (opcional)
 
 Ejemplo local:
 
@@ -51,34 +94,39 @@ GITHUB_ID=""
 GITHUB_SECRET=""
 ```
 
-## Levantar proyecto en local
+## Setup local
 
-1. Instala dependencias:
+1. Instalar dependencias:
 
 ```bash
 npm install
 ```
 
-2. Levanta PostgreSQL local:
+2. Levantar PostgreSQL local:
 
 ```bash
 docker compose up -d
 ```
 
-3. Aplica migraciones y seed:
+3. Aplicar migraciones:
 
 ```bash
 npm run db:migrate
+```
+
+4. Cargar datos base:
+
+```bash
 npm run db:seed
 ```
 
-4. Inicia el servidor:
+5. Levantar aplicacion:
 
 ```bash
 npm run dev
 ```
 
-5. Verifica calidad:
+6. Verificacion de calidad:
 
 ```bash
 npm run lint
@@ -88,52 +136,32 @@ npm run build
 
 ## Scripts disponibles
 
-- `npm run dev`: desarrollo
-- `npm run build`: build de producción
-- `npm run start`: servir build
-- `npm run lint`: ESLint
-- `npm run test`: tests unitarios
-- `npm run test:watch`: tests en watch
-- `npm run db:generate`: Prisma Client
-- `npm run db:migrate`: `prisma migrate deploy`
-- `npm run db:dev`: `prisma migrate dev`
-- `npm run db:seed`: `prisma db seed`
+- `npm run dev`
+- `npm run build`
+- `npm run start`
+- `npm run lint`
+- `npm run test`
+- `npm run test:watch`
+- `npm run db:generate`
+- `npm run db:migrate`
+- `npm run db:dev`
+- `npm run db:seed`
 
 ## Credenciales admin del seed
 
 - Email: `admin@jamndev.dev`
 - Password: `Admin123*`
 
-## Estructura de carpetas
+## API principal
 
-```text
-app/
-  api/
-  admin/
-  exercises/
-  projects/
-components/
-lib/
-prisma/
-  migrations/
-server/
-  repositories/
-  use-cases/
-public/
-  cv.pdf
-tests/
-```
-
-## Endpoints principales
-
-Públicos:
+Publica:
 
 - `GET /api/cv`
-- `GET /api/exercises?query=node&tag=react`
-- `GET /api/projects?query=next&tag=api`
-- `GET /api/search?query=auth&type=all`
+- `GET /api/exercises`
+- `GET /api/projects`
+- `GET /api/search`
 
-Admin (requiere sesión ADMIN):
+Admin (requiere rol ADMIN):
 
 - `POST /api/exercises`
 - `PUT /api/exercises/:id`
@@ -148,98 +176,76 @@ Formato de respuesta:
 ```json
 {
   "status": "success",
-  "message": "Ejercicios obtenidos",
-  "data": []
+  "message": "Operacion completada",
+  "data": {}
 }
 ```
 
-## Flujos implementados
-
-1. Auth:
-- Login con credenciales vía NextAuth (`/login`)
-- Protección de `/admin/*` vía `proxy.ts`
-
-2. Admin CRUD:
-- Dashboard
-- Edición CV (`/admin/cv`)
-- CRUD proyectos (`/admin/projects`)
-- CRUD ejercicios (`/admin/exercises`)
-
-3. Búsqueda:
-- Endpoint `GET /api/search`
-- UI de búsqueda en Home, Proyectos y Ejercicios
-
-4. Publicación CV:
-- Home con perfil y resumen
-- Secciones públicas `/projects`, `/exercises`, `/exercises/[slug]`
-- Descarga de CV estático en `/cv.pdf`
-
 ## Testing
 
-Pruebas mínimas incluidas:
+Cobertura minima incluida:
 
-- `tests/use-cases/search-content.use-case.test.ts`
-- `tests/components/exercise-card.test.tsx`
-- `tests/routes/exercises-route.test.ts`
+- Use case de busqueda
+- Componente React (ExerciseCard)
+- Route handler (`GET /api/exercises`)
 
-## Configurar GitHub Actions (CI)
+## CI/CD
 
-El workflow ya existe en `.github/workflows/ci.yml` y corre en `push` y `pull_request`:
+Workflow: `.github/workflows/ci.yml`
 
-- `npm ci`
-- `npm run lint`
-- `npm run test`
-- `npm run build`
+Se ejecuta en `push` y `pull_request` con:
 
-Pasos recomendados:
+1. `npm ci`
+2. `npm run lint`
+3. `npm run test`
+4. `npm run build`
 
-1. Sube el repositorio a GitHub con rama `main` y rama `develop`.
-2. Verifica que `.github/workflows/ci.yml` esté en la rama que uses para PRs.
-3. En GitHub entra a `Settings > Branches > Add branch protection rule`.
-4. Protege `main` (y opcionalmente `develop`) requiriendo el check `CI / ci`.
-5. Trabaja por PR: cada push debe dejar `lint`, `test` y `build` en verde antes de merge.
+## Despliegue en Vercel
 
-Notas:
-
-- No necesitas secretos para este CI base.
-- El workflow ya fija variables mínimas para construir en CI.
-
-## Configurar despliegue en Vercel
-
-1. Crea una base PostgreSQL administrada (Neon/Supabase recomendado).
-2. Importa el repo en Vercel (`Add New Project`).
-3. En `Settings > Environment Variables` configura en `Production` (y también `Preview` si aplica):
-- `DATABASE_URL`
-- `NEXTAUTH_URL` (URL pública final, por ejemplo `https://tu-dominio.vercel.app`)
-- `NEXTAUTH_SECRET`
-- `GITHUB_ID` (opcional)
-- `GITHUB_SECRET` (opcional)
-4. Asegura runtime Node 24 en Vercel (`Settings > General > Node.js Version`).
-5. Antes del primer deploy funcional, ejecuta migraciones contra la BD de producción:
+1. Crear base PostgreSQL administrada (Neon/Supabase recomendado).
+2. Importar repo en Vercel.
+3. Configurar env vars en Vercel:
+   - `DATABASE_URL`
+   - `NEXTAUTH_URL`
+   - `NEXTAUTH_SECRET`
+   - `GITHUB_ID` (opcional)
+   - `GITHUB_SECRET` (opcional)
+4. Asegurar runtime Node 24.
+5. Ejecutar migraciones contra BD productiva:
 
 ```bash
 DATABASE_URL="postgresql://..." npm run db:migrate
 ```
 
-6. Lanza un redeploy desde Vercel.
-7. Valida login, panel admin y endpoints (`/api/search`, `/api/projects`, `/api/exercises`).
+6. Redeploy y validacion funcional.
 
-## Assets visuales
+## Flujo de trabajo recomendado
 
-Se tomaron recursos visuales de templates locales, copiados al proyecto (sin dependencia runtime directa):
+- Rama base protegida: `main`
+- Rama de integracion: `develop`
+- Trabajo por feature branch + Pull Request
+- Merge solo con CI en verde
 
-- `stratos-template`
-- `reeni-personal-portfolio-nextjs-template`
+## Naturaleza de aprendizaje
 
-## TODOs pendientes
+Este proyecto esta planteado como base real de aprendizaje y evolucion.
 
-- Finalizar contenido profesional definitivo.
-- Generación dinámica de CV PDF (actualmente `/public/cv.pdf` estático).
-- Pruebas E2E y revisión de accesibilidad.
-- Mejorar UX de filtros avanzados en admin.
+Objetivos de aprendizaje:
 
-## Convenciones
+- Entender arquitectura modular en Next.js
+- Practicar backend interno con repositorios/use-cases
+- Consolidar flujo completo local -> CI -> Vercel
+- Mejorar calidad de codigo de forma incremental
 
-- Rama de trabajo: `develop`
-- Documentación en español con TSDoc/JSDoc en exportables
-- Criterio mínimo de calidad: `lint + test + build`
+## Roadmap sugerido
+
+1. Agregar pruebas E2E (Playwright).
+2. Mejorar accesibilidad (a11y) y navegacion por teclado.
+3. Migrar configuracion visual a tokens de diseno reutilizables.
+4. Agregar observabilidad (logs estructurados + metricas).
+5. Implementar generacion dinamica de CV PDF.
+
+## Notas
+
+- Los assets visuales se copiaron desde templates locales (sin dependencia runtime directa).
+- Logs locales de servidor dev (`.dev-server*.log`) estan ignorados en Git.
