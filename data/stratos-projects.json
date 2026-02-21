@@ -12,7 +12,7 @@
     "title": "SpringBoot CRUD API",
     "stack": ["Java", "Spring Boot", "REST", "PostgreSQL"],
     "description": "API RESTful desarrollada en Spring Boot que permite operaciones CRUD sobre entidades de negocio, implementando arquitectura hexagonal y manejo de excepciones globales.",
-    "repo": "https://github.com/tuRepo",
+    "repo": "https://github.com/alvincode99/crud_basic",
     "demo": null,
     "status": "Completed",
     "category": "Backend"
@@ -21,7 +21,7 @@
     "title": "Angular CRUD Portal",
     "stack": ["Angular", "TypeScript", "REST"],
     "description": "Portal web desarrollado en Angular para el consumo de servicios REST expuestos por una API Spring Boot. Incluye formularios reactivos, validaciones y manejo de estados.",
-    "repo": "https://github.com/tuRepo",
+    "repo": "https://github.com/alvincode99/front_crud_basic",
     "demo": null,
     "status": "Completed",
     "category": "Fullstack"
