@@ -3,6 +3,7 @@
 import { useCallback, useState } from "react";
 
 import StratosContactSection from "@/components/stratos/contact-section";
+import StratosClientsSection from "@/components/stratos/clients-section";
 import StratosHeader from "@/components/stratos/header";
 import StratosMobileNavigation from "@/components/stratos/mobile-navigation";
 import StratosMyJourney from "@/components/stratos/my-journey";
@@ -42,6 +43,7 @@ export default function StratosHomeShell() {
       <StratosWhatIHaveDone />
       <StratosMyJourney />
       <StratosProjectsSkills />
+      <StratosClientsSection />
       <StratosContactSection />
     </div>
   );

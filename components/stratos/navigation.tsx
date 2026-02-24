@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
+  Building2,
   BriefcaseBusiness,
   ListTodo,
   Mail,
@@ -51,7 +52,7 @@ export default function StratosNavigation({ onOpenProfilePanel }: StratosNavigat
   const [activeItem, setActiveItem] = useState(1);
 
   const sectionIds = useMemo(
-    () => ["about-me", "my-skills", "portfolio", "my-journey", "testimonials", "contact"],
+    () => ["about-me", "my-skills", "portfolio", "my-journey", "testimonials", "clients", "contact"],
     [],
   );
 
@@ -126,7 +127,8 @@ export default function StratosNavigation({ onOpenProfilePanel }: StratosNavigat
       icon: <SquareChartGantt size={20} strokeWidth={1.5} />,
     },
     { id: 5, title: "Proyectos", icon: <Quote size={20} strokeWidth={1.5} /> },
-    { id: 6, title: "Contacto", icon: <Mail size={20} strokeWidth={1.5} /> },
+    { id: 6, title: "Clientes", icon: <Building2 size={20} strokeWidth={1.5} /> },
+    { id: 7, title: "Contacto", icon: <Mail size={20} strokeWidth={1.5} /> },
   ];
 
   return (
